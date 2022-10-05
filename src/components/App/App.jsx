@@ -1,71 +1,71 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { FeedbackOptions } from 'components/FeedbackOptions';
 import { Statistics } from 'components/Statistics';
 import { Section } from 'components/Section';
 import { Notification } from 'components/Notification';
 import { Container, Card, Title } from 'components/App/App.styled';
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+export const App = () => {
+  const [good, setGoog] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const onLeaveFeedback = propertyName => {
+    switch (propertyName) {
+      case 'good':
+        return setGoog(prevGood => prevGood + 1);
+      case 'neutral':
+        return setNeutral(prevNeutral => prevNeutral + 1);
+      case 'bad':
+        return setBad(prevBad => prevBad + 1);
+      default:
+        return;
+    }
   };
 
-  countTotalFeedback() {
-    return Object.values(this.state).reduce((acc, value) => {
-      return (acc += value);
-    }, 0);
-  }
+  const countTotalFeedback = () => {
+    const total = good + neutral + bad;
+    return total;
+  };
 
-  countPositiveFeedbackPercentage() {
-    const total = this.countTotalFeedback();
+  const countPositiveFeedbackPercentage = () => {
+    const total = countTotalFeedback();
     if (!total) {
       return;
     }
-    const value = this.state.good;
+    const value = good;
     const result = (value / total) * 100;
     return Number(Math.ceil(result));
-  }
-
-  onLeaveFeedback = propertyName => {
-    this.setState(prevState => {
-      const value = prevState[propertyName];
-      return {
-        [propertyName]: value + 1,
-      };
-    });
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-    const total = this.countTotalFeedback();
-    const positivePercentage = this.countPositiveFeedbackPercentage();
-    return (
-      <Container>
-        <Card>
-          <Title>Cafe Expresso</Title>
-          <Section title={'Please leave feedback'}>
-            <FeedbackOptions
-              options={this.state}
-              onLeaveFeedback={this.onLeaveFeedback}
+  const options = { good, neutral, bad };
+  const total = countTotalFeedback();
+  const positivePercentage = countPositiveFeedbackPercentage();
+
+  return (
+    <Container>
+      <Card>
+        <Title>Cafe Expresso</Title>
+        <Section title={'Please leave feedback'}>
+          <FeedbackOptions
+            options={options}
+            onLeaveFeedback={onLeaveFeedback}
+          />
+        </Section>
+        <Section title={'Statics'}>
+          {!total ? (
+            <Notification message={'There is no feedback :('} />
+          ) : (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positivePercentage={positivePercentage ? positivePercentage : 0}
             />
-          </Section>
-          <Section title={'Statics'}>
-            {!total ? (
-              <Notification message={'There is no feedback'} />
-            ) : (
-              <Statistics
-                good={good}
-                neutral={neutral}
-                bad={bad}
-                total={total}
-                positivePercentage={positivePercentage ? positivePercentage : 0}
-              />
-            )}
-          </Section>
-        </Card>
-      </Container>
-    );
-  }
-}
+          )}
+        </Section>
+      </Card>
+    </Container>
+  );
+};

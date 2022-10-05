@@ -20,7 +20,7 @@ export const Button = styled.button`
   color: ${p => p.theme.colors.primary};
   background-color: ${p => p.theme.colors.accent};
   border: none;
-  border-radius: ${p => p.theme.radii.primary}px;
+  border-radius: ${p => p.theme.radii.s}px;
   cursor: pointer;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 

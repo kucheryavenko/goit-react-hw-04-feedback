@@ -3,8 +3,8 @@ export const theme = {
     body: '#f5f4fa',
     primary: '#fff',
     secondary: '#cacaca',
-    accent: '#2196f3',
-    hover: '#188ce8',
+    accent: '#2da44e',
+    hover: '#2c974b',
   },
   shadows: {
     shadow:
@@ -13,5 +13,8 @@ export const theme = {
   space: [4, 8, 12, 16, 20, 24],
   radii: {
     primary: 16,
+    s: 6,
+    m: 10,
+    l: 16,
   },
 };
